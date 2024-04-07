@@ -27,7 +27,7 @@ static std::vector<__CellPos> const __cell_dpos_array={
 static __LifeState __make_random_life_state(){
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<unsigned char> distrib(0,1);
+    static std::uniform_int_distribution<unsigned short> distrib(0,1);
     return static_cast<__LifeState>(distrib(gen));
 }
 static long long __grid_row(){
