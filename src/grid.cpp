@@ -12,6 +12,9 @@ struct __Cell{
     __LifeState life_state_;
     unsigned char alive_neighbors_count_;
 };
+struct __CellPos{
+    long long row_,col_;
+};
 static __LifeState __make_random_life_state(){
     static bool const random_init_flag=[](){
         srand(static_cast<unsigned>(time(nullptr)));
@@ -50,31 +53,31 @@ static void __grid_update_alive_neighbors_count(){
     }
 }
 static void __grid_update_alive_neighbors_count_fast(){
+    std::vector<__CellPos> stack;
     for(long long row=0;row<__grid_row();++row){
         for(long long col=0;col<__grid_col();++col){
             __grid[row][col].alive_neighbors_count_=0;
+            if(__grid[row][col].life_state_==__LifeState::ALIVE){
+                stack.push_back(__CellPos{row,col});
+            }
         }
     }
     long long x=0,y=0;
-    for(long long row=0;row<__grid_row();++row){
-        for(long long col=0;col<__grid_col();++col){
-            if(__grid[row][col].life_state_==__LifeState::DEAD){
-                continue;
-            }
-            for(long long dx=-1;dx<=1;++dx){
-                for(long long dy=-1;dy<=1;++dy){
-                    x=row+dx;
-                    y=col+dy;
-                    if(
-                        !(dx==0&&dy==0)
-                        &&x>=0&&x<__grid_row()
-                        &&y>=0&&y<__grid_col()
-                    ){
-                        ++(__grid[x][y].alive_neighbors_count_);
-                    }
+    while(!stack.empty()){
+        for(long long dx=-1;dx<=1;++dx){
+            for(long long dy=-1;dy<=1;++dy){
+                x=stack.back().row_+dx;
+                y=stack.back().col_+dy;
+                if(
+                    !(dx==0&&dy==0)
+                    &&x>=0&&x<__grid_row()
+                    &&y>=0&&y<__grid_col()
+                ){
+                    ++(__grid[x][y].alive_neighbors_count_);
                 }
             }
         }
+        stack.pop_back();
     }
 }
 static void __grid_update_alive_neighbors_count_loop_bound(){
@@ -108,37 +111,37 @@ static void __grid_update_alive_neighbors_count_loop_bound(){
     }
 }
 static void __grid_update_alive_neighbors_count_loop_bound_fast(){
+    std::vector<__CellPos> stack;
     for(long long row=0;row<__grid_row();++row){
         for(long long col=0;col<__grid_col();++col){
             __grid[row][col].alive_neighbors_count_=0;
+            if(__grid[row][col].life_state_==__LifeState::ALIVE){
+                stack.push_back(__CellPos{row,col});
+            }
         }
     }
     long long x=0,y=0;
-    for(long long row=0;row<__grid_row();++row){
-        for(long long col=0;col<__grid_col();++col){
-            if(__grid[row][col].life_state_==__LifeState::DEAD){
-                continue;
-            }
-            for(long long dx=-1;dx<=1;++dx){
-                for(long long dy=-1;dy<=1;++dy){
-                    x=row+dx;
-                    y=col+dy;
-                    if(x==-1){
-                        x=__grid_row()-1;
-                    }else if(x==__grid_row()){
-                        x=0;
-                    }
-                    if(y==-1){
-                        y=__grid_col()-1;
-                    }else if(y==__grid_col()){
-                        y=0;
-                    }
-                    if(!(dx==0&&dy==0)){
-                        ++(__grid[x][y].alive_neighbors_count_);
-                    }
+    while(!stack.empty()){
+        for(long long dx=-1;dx<=1;++dx){
+            for(long long dy=-1;dy<=1;++dy){
+                x=stack.back().row_+dx;
+                y=stack.back().col_+dy;
+                if(x==-1){
+                    x=__grid_row()-1;
+                }else if(x==__grid_row()){
+                    x=0;
+                }
+                if(y==-1){
+                    y=__grid_col()-1;
+                }else if(y==__grid_col()){
+                    y=0;
+                }
+                if(!(dx==0&&dy==0)){
+                    ++(__grid[x][y].alive_neighbors_count_);
                 }
             }
         }
+        stack.pop_back();
     }
 }
 void grid_init(long long row,long long col){
