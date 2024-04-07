@@ -56,7 +56,7 @@ int main(){
         __console_clear();
         std::cout<<(
             grid_to_string()
-            +"Turn: "
+            +"Turn:"
             +std::to_string(turn_count)
             +"\nAlive:"
             +std::to_string(grid_alive_count())
