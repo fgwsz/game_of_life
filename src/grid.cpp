@@ -15,7 +15,7 @@ struct __Cell{
 };
 static __LifeState __make_random_life_state(){
     static bool const random_init_flag=[](){
-        srand(time(nullptr));
+        srand(static_cast<unsigned>(time(nullptr)));
         return true;
     }();
     return static_cast<__LifeState>(rand()%2);
