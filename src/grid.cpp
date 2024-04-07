@@ -2,7 +2,6 @@
 extern "C"{
 #include<time.h>//time
 #include<stdlib.h>//srand rand
-#include<stdio.h>//printf
 }//extern "C"
 #include<vector>//std::vector
 enum class __LifeState:unsigned char{
@@ -50,6 +49,7 @@ static void __grid_update_alive_neighbors_count(){
         }
     }
 }
+// TODO:BUG
 static void __grid_update_alive_neighbors_count_fast(){
     for(long long row=0;row<__grid_row();++row){
         for(long long col=0;col<__grid_col();++col){
@@ -92,7 +92,8 @@ void grid_init(long long row,long long col){
             }
         }
     }
-    __grid_update_alive_neighbors_count_fast();
+    __grid_update_alive_neighbors_count();
+    //__grid_update_alive_neighbors_count_fast();
 }
 void grid_update(){
     unsigned char count=0;
@@ -114,22 +115,29 @@ void grid_update(){
             }
         }
     }
-    __grid_update_alive_neighbors_count_fast();
+    __grid_update_alive_neighbors_count();
+    //__grid_update_alive_neighbors_count_fast();
 }
-void grid_show(){
+std::string grid_to_string(){
+    std::string ret;
     for(auto const& line:__grid){
         for(auto const& cell:line){
             if(cell.life_state_==__LifeState::ALIVE){
-                printf("■");
-            }else if(cell.alive_neighbors_count_>0){
-                printf("%d",cell.alive_neighbors_count_);
-            }else{
-                printf("·");
+                ret.append("■");
             }
-            printf(" ");
+            /*else if(cell.alive_neighbors_count_>0){
+                ret.append(std::to_string(
+                    static_cast<unsigned short>(cell.alive_neighbors_count_)
+                ));
+            }*/
+            else{
+                ret.append("·");
+            }
+            ret.append(" ");
         }
-        printf("\n");
+        ret.append("\n");
     }
+    return ret;
 }
 long long grid_alive_count(){
     return __grid_alive_count;
