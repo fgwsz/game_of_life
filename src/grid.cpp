@@ -15,6 +15,16 @@ struct __Cell{
 struct __CellPos{
     long long row_,col_;
 };
+static std::vector<__CellPos> const __cell_dpos_array={
+    {-1,-1},
+    {-1,0},
+    {-1,1},
+    {0,-1},
+    {0,1},
+    {1,-1},
+    {1,0},
+    {1,1}
+};
 static __LifeState __make_random_life_state(){
     static bool const random_init_flag=[](){
         srand(static_cast<unsigned>(time(nullptr)));
@@ -35,18 +45,15 @@ static void __grid_update_alive_neighbors_count(){
     for(long long row=0;row<__grid_row();++row){
         for(long long col=0;col<__grid_col();++col){
             __grid[row][col].alive_neighbors_count_=0;
-            for(long long dx=-1;dx<=1;++dx){
-                for(long long dy=-1;dy<=1;++dy){
-                    x=row+dx;
-                    y=col+dy;
-                    if(
-                        !(dx==0&&dy==0)
-                        &&x>=0&&x<__grid_row()
-                        &&y>=0&&y<__grid_col()
-                        &&__grid[x][y].life_state_==__LifeState::ALIVE
-                    ){
-                        ++(__grid[row][col].alive_neighbors_count_);
-                    }
+            for(__CellPos const& dpos:__cell_dpos_array){
+                x=row+dpos.row_;
+                y=col+dpos.col_;
+                if(
+                    x>=0&&x<__grid_row()
+                    &&y>=0&&y<__grid_col()
+                    &&__grid[x][y].life_state_==__LifeState::ALIVE
+                ){
+                    ++(__grid[row][col].alive_neighbors_count_);
                 }
             }
         }
@@ -64,17 +71,14 @@ static void __grid_update_alive_neighbors_count_fast(){
     }
     long long x=0,y=0;
     while(!stack.empty()){
-        for(long long dx=-1;dx<=1;++dx){
-            for(long long dy=-1;dy<=1;++dy){
-                x=stack.back().row_+dx;
-                y=stack.back().col_+dy;
-                if(
-                    !(dx==0&&dy==0)
-                    &&x>=0&&x<__grid_row()
-                    &&y>=0&&y<__grid_col()
-                ){
-                    ++(__grid[x][y].alive_neighbors_count_);
-                }
+        for(__CellPos const& dpos:__cell_dpos_array){
+            x=stack.back().row_+dpos.row_;
+            y=stack.back().col_+dpos.col_;
+            if(
+                x>=0&&x<__grid_row()
+                &&y>=0&&y<__grid_col()
+            ){
+                ++(__grid[x][y].alive_neighbors_count_);
             }
         }
         stack.pop_back();
@@ -85,26 +89,21 @@ static void __grid_update_alive_neighbors_count_loop_bound(){
     for(long long row=0;row<__grid_row();++row){
         for(long long col=0;col<__grid_col();++col){
             __grid[row][col].alive_neighbors_count_=0;
-            for(long long dx=-1;dx<=1;++dx){
-                for(long long dy=-1;dy<=1;++dy){
-                    x=row+dx;
-                    y=col+dy;
-                    if(x==-1){
-                        x=__grid_row()-1;
-                    }else if(x==__grid_row()){
-                        x=0;
-                    }
-                    if(y==-1){
-                        y=__grid_col()-1;
-                    }else if(y==__grid_col()){
-                        y=0;
-                    }
-                    if(
-                        !(dx==0&&dy==0)
-                        &&__grid[x][y].life_state_==__LifeState::ALIVE
-                    ){
-                        ++(__grid[row][col].alive_neighbors_count_);
-                    }
+            for(__CellPos const& dpos:__cell_dpos_array){
+                x=row+dpos.row_;
+                y=col+dpos.col_;
+                if(x==-1){
+                    x=__grid_row()-1;
+                }else if(x==__grid_row()){
+                    x=0;
+                }
+                if(y==-1){
+                    y=__grid_col()-1;
+                }else if(y==__grid_col()){
+                    y=0;
+                }
+                if(__grid[x][y].life_state_==__LifeState::ALIVE){
+                    ++(__grid[row][col].alive_neighbors_count_);
                 }
             }
         }
@@ -122,24 +121,20 @@ static void __grid_update_alive_neighbors_count_loop_bound_fast(){
     }
     long long x=0,y=0;
     while(!stack.empty()){
-        for(long long dx=-1;dx<=1;++dx){
-            for(long long dy=-1;dy<=1;++dy){
-                x=stack.back().row_+dx;
-                y=stack.back().col_+dy;
-                if(x==-1){
-                    x=__grid_row()-1;
-                }else if(x==__grid_row()){
-                    x=0;
-                }
-                if(y==-1){
-                    y=__grid_col()-1;
-                }else if(y==__grid_col()){
-                    y=0;
-                }
-                if(!(dx==0&&dy==0)){
-                    ++(__grid[x][y].alive_neighbors_count_);
-                }
+        for(__CellPos const& dpos:__cell_dpos_array){
+            x=stack.back().row_+dpos.row_;
+            y=stack.back().col_+dpos.col_;
+            if(x==-1){
+                x=__grid_row()-1;
+            }else if(x==__grid_row()){
+                x=0;
             }
+            if(y==-1){
+                y=__grid_col()-1;
+            }else if(y==__grid_col()){
+                y=0;
+            }
+            ++(__grid[x][y].alive_neighbors_count_);
         }
         stack.pop_back();
     }
