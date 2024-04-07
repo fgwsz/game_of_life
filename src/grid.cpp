@@ -77,6 +77,70 @@ static void __grid_update_alive_neighbors_count_fast(){
         }
     }
 }
+static void __grid_update_alive_neighbors_count_loop_bound(){
+    long long x=0,y=0;
+    for(long long row=0;row<__grid_row();++row){
+        for(long long col=0;col<__grid_col();++col){
+            __grid[row][col].alive_neighbors_count_=0;
+            for(long long dx=-1;dx<=1;++dx){
+                for(long long dy=-1;dy<=1;++dy){
+                    x=row+dx;
+                    y=col+dy;
+                    if(x==-1){
+                        x=__grid_row()-1;
+                    }else if(x==__grid_row()){
+                        x=0;
+                    }
+                    if(y==-1){
+                        y=__grid_col()-1;
+                    }else if(y==__grid_col()){
+                        y=0;
+                    }
+                    if(
+                        !(dx==0&&dy==0)
+                        &&__grid[x][y].life_state_==__LifeState::ALIVE
+                    ){
+                        ++(__grid[row][col].alive_neighbors_count_);
+                    }
+                }
+            }
+        }
+    }
+}
+static void __grid_update_alive_neighbors_count_loop_bound_fast(){
+    for(long long row=0;row<__grid_row();++row){
+        for(long long col=0;col<__grid_col();++col){
+            __grid[row][col].alive_neighbors_count_=0;
+        }
+    }
+    long long x=0,y=0;
+    for(long long row=0;row<__grid_row();++row){
+        for(long long col=0;col<__grid_col();++col){
+            if(__grid[row][col].life_state_==__LifeState::DEAD){
+                continue;
+            }
+            for(long long dx=-1;dx<=1;++dx){
+                for(long long dy=-1;dy<=1;++dy){
+                    x=row+dx;
+                    y=col+dy;
+                    if(x==-1){
+                        x=__grid_row()-1;
+                    }else if(x==__grid_row()){
+                        x=0;
+                    }
+                    if(y==-1){
+                        y=__grid_col()-1;
+                    }else if(y==__grid_col()){
+                        y=0;
+                    }
+                    if(!(dx==0&&dy==0)){
+                        ++(__grid[x][y].alive_neighbors_count_);
+                    }
+                }
+            }
+        }
+    }
+}
 void grid_init(long long row,long long col){
     __grid.reserve(row);
     __grid.resize(row);
@@ -91,8 +155,7 @@ void grid_init(long long row,long long col){
             }
         }
     }
-    //__grid_update_alive_neighbors_count();
-    __grid_update_alive_neighbors_count_fast();
+    __grid_update_alive_neighbors_count_loop_bound_fast();
 }
 void grid_update(){
     unsigned char count=0;
@@ -114,8 +177,7 @@ void grid_update(){
             }
         }
     }
-    //__grid_update_alive_neighbors_count();
-    __grid_update_alive_neighbors_count_fast();
+    __grid_update_alive_neighbors_count_loop_bound_fast();
 }
 std::string grid_to_string(){
     std::string ret;
@@ -123,13 +185,7 @@ std::string grid_to_string(){
         for(auto const& cell:line){
             if(cell.life_state_==__LifeState::ALIVE){
                 ret.append("■");
-            }
-            /*else if(cell.alive_neighbors_count_>0){
-                ret.append(std::to_string(
-                    static_cast<unsigned short>(cell.alive_neighbors_count_)
-                ));
-            }*/
-            else{
+            }else{
                 ret.append("·");
             }
             ret.append(" ");
