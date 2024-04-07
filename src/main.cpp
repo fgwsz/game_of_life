@@ -64,7 +64,7 @@ static void __automatic_mode(){
         grid_update();
         ++turn_count;
         using namespace std::chrono_literals;
-        std::this_thread::sleep_for(1000ms);
+        std::this_thread::sleep_for(500ms);
     }
 }
 static void __manual_mode(){

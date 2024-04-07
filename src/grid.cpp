@@ -49,7 +49,6 @@ static void __grid_update_alive_neighbors_count(){
         }
     }
 }
-// TODO:BUG
 static void __grid_update_alive_neighbors_count_fast(){
     for(long long row=0;row<__grid_row();++row){
         for(long long col=0;col<__grid_col();++col){
@@ -92,8 +91,8 @@ void grid_init(long long row,long long col){
             }
         }
     }
-    __grid_update_alive_neighbors_count();
-    //__grid_update_alive_neighbors_count_fast();
+    //__grid_update_alive_neighbors_count();
+    __grid_update_alive_neighbors_count_fast();
 }
 void grid_update(){
     unsigned char count=0;
@@ -115,8 +114,8 @@ void grid_update(){
             }
         }
     }
-    __grid_update_alive_neighbors_count();
-    //__grid_update_alive_neighbors_count_fast();
+    //__grid_update_alive_neighbors_count();
+    __grid_update_alive_neighbors_count_fast();
 }
 std::string grid_to_string(){
     std::string ret;
