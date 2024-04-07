@@ -1,17 +1,12 @@
-extern "C"{
-#include<stdlib.h>//system
-}//extern "C"
-#include<string>//std::string std::getline std::stoll
+#include<cstdlib>//std::system
+#include<string>//std::string std::getline std::stoll std::to_string
 #include<iostream>//std::cout std::cin
 #include<functional>//std::function
 #include<chrono>//std::chrono
 #include<thread>//std::this_thread
 #include"grid.h"//grid_init grid_update grid_show grid_alive_count
 static bool const __iostream_init_flag=[](){
-    //std::ios::sync_with_stdio(false);
-    //std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-    //std::cout<<std::unitbuf;
     return true;
 }();
 static long long __read_ll(
@@ -37,9 +32,9 @@ static long long __read_ll(
 }
 static void __console_clear(){
     #ifdef _WIN32
-        system("cls");
+        std::system("cls");
     #else
-        system("clear");
+        std::system("clear");
     #endif
 }
 int main(){
@@ -59,9 +54,14 @@ int main(){
     for(;;){
         start_time=std::chrono::high_resolution_clock::now();
         __console_clear();
-        std::cout<<grid_to_string();
-        std::cout<<"Turn: "<<turn_count<<"\n";
-        std::cout<<"Alive: "<<grid_alive_count()<<"\n";
+        std::cout<<(
+            grid_to_string()
+            +"Turn: "
+            +std::to_string(turn_count)
+            +"\nAlive:"
+            +std::to_string(grid_alive_count())
+            +"\n"
+        );
         if(grid_alive_count()==0){
             std::cout<<"Game Over!\n";
             break;

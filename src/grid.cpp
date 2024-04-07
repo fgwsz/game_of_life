@@ -1,8 +1,5 @@
 #include"grid.h"
-extern "C"{
-#include<time.h>//time
-#include<stdlib.h>//srand rand
-}//extern "C"
+#include<random>//std::random_device std::mt19937 std::uniform_int_distribution
 #include<vector>//std::vector
 enum class __LifeState:unsigned char{
     DEAD=0,
@@ -15,25 +12,24 @@ struct __Cell{
 struct __CellPos{
     long long row_,col_;
 };
-static std::vector<__CellPos> const __cell_dpos_array={
-    {-1,-1},
-    {-1,0},
-    {-1,1},
-    {0,-1},
-    {0,1},
-    {1,-1},
-    {1,0},
-    {1,1}
-};
-static __LifeState __make_random_life_state(){
-    static bool const random_init_flag=[](){
-        srand(static_cast<unsigned>(time(nullptr)));
-        return true;
-    }();
-    return static_cast<__LifeState>(rand()%2);
-}
 static std::vector<std::vector<__Cell>> __grid;
 static long long __grid_alive_count=0;
+static std::vector<__CellPos> const __cell_dpos_array={
+    {-1,-1},
+    {-1, 0},
+    {-1, 1},
+    { 0,-1},
+    { 0, 1},
+    { 1,-1},
+    { 1, 0},
+    { 1, 1}
+};
+static __LifeState __make_random_life_state(){
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_int_distribution<unsigned char> distrib(0,1);
+    return static_cast<__LifeState>(distrib(gen));
+}
 static long long __grid_row(){
     return static_cast<long long>(__grid.size());
 }
