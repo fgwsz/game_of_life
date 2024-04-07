@@ -4,6 +4,7 @@ extern "C"{
 #include<string>//std::string std::getline std::stoll
 #include<iostream>//std::cout std::cin
 #include<functional>//std::function
+#include<chrono>//std::chrono
 #include<thread>//std::this_thread
 #include"grid.h"//grid_init grid_update grid_show grid_alive_count
 static bool const __iostream_init_flag=[](){
@@ -41,7 +42,7 @@ static void __console_clear(){
         system("clear");
     #endif
 }
-static void __automatic_mode(){
+int main(){
     long long row=__read_ll(
         "Input Row(>0): ",
         [](long long num){return num>0;}
@@ -52,73 +53,27 @@ static void __automatic_mode(){
     );
     grid_init(row,col);
     long long turn_count=0;
+    std::chrono::high_resolution_clock::time_point start_time;
+    std::chrono::milliseconds duration;
+    std::chrono::milliseconds const once_total_time(500);
     for(;;){
+        start_time=std::chrono::high_resolution_clock::now();
         __console_clear();
         std::cout<<grid_to_string();
         std::cout<<"Turn: "<<turn_count<<"\n";
         std::cout<<"Alive: "<<grid_alive_count()<<"\n";
         if(grid_alive_count()==0){
             std::cout<<"Game Over!\n";
-            return;
+            break;
         }
         grid_update();
         ++turn_count;
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(500ms);
-    }
-}
-static void __manual_mode(){
-    long long row=__read_ll(
-        "Input Row(>0): ",
-        [](long long num){return num>0;}
-    );
-    long long col=__read_ll(
-        "Input Col(>0): ",
-        [](long long num){return num>0;}
-    );
-    grid_init(row,col);
-    std::string command;
-    long long turn_count=0;
-    for(;;){
-        std::cout<<grid_to_string();
-        std::cout<<"Turn: "<<turn_count<<"\n";
-        std::cout<<"Alive: "<<grid_alive_count()<<"\n";
-        if(grid_alive_count()==0){
-            std::cout<<"Game Over!\n";
-            return;
+        duration=std::chrono::duration_cast<decltype(duration)>(
+            std::chrono::high_resolution_clock::now()-start_time
+        );
+        if(duration<once_total_time){
+            std::this_thread::sleep_for(once_total_time-duration);
         }
-        std::cout<<"Command{Q/q->Quit,Others->Continue}\n";
-        std::cout<<"Input Command: ";
-        std::getline(std::cin,command);
-        if(command=="Q"||command=="q"){
-            return;
-        }
-        grid_update();
-        ++turn_count;
-    }
-}
-int main(){
-    std::string command;
-    std::cout<<"Command{A/a->Automatic Mode,M/m->Manual Mode}\n";
-    enum class Mode:unsigned char{
-        AUTOMATIC_MODE=0,
-        MANUAL_MODE=1
-    };
-    Mode mode=Mode::AUTOMATIC_MODE;
-    for(;;){
-        std::cout<<"Input Command: ";
-        std::getline(std::cin,command);
-        if(command=="A"||command=="a"){
-            mode=Mode::AUTOMATIC_MODE;
-            break;
-        }else if(command=="M"||command=="m"){
-            mode=Mode::MANUAL_MODE;
-            break;
-        }
-    }
-    switch(mode){
-        case Mode::AUTOMATIC_MODE:{__automatic_mode();break;}
-        case Mode::MANUAL_MODE:{__manual_mode();break;}
     }
     return 0;
 }
