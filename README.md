@@ -1,6 +1,6 @@
 # 生命游戏(Game Of Life)
 # 安装(Windows/Linux/MacOS)
-需用户安装环境依赖，自行构建可执行文件。
+需用户安装环境依赖，自行构建可执行文件。  
 Windows所需环境依赖：  
 `CMake>=3.0`  
 `Visual Studio>=2017`  
@@ -15,14 +15,10 @@ or
 `Clang>=10.0`  
 ## Windows操作系统构建
 ### Visual Studio构建
-安装`CMake`和`Visual Studio`，安装完成之后，
-鼠标左键双击`build-msvc*.ps1`生成`game_of_life-msvc*.exe`并运行。
+执行`build-msvc*.ps1`生成`game_of_life-msvc*.exe`并运行。
 ### MinGW-W64构建
-安装`MinGW-W64`，安装完成之后，
-鼠标左键双击`build-mingw*.ps1`生成`game_of_life-mingw*.exe`并运行。
+执行`build-mingw*.ps1`生成`game_of_life-mingw*.exe`并运行。
 ## Linux操作系统构建
-安装`CMake`，安装完成之后，
 执行`build-linux*.sh`生成`game_of_life-linux*`并运行。
 ## MacOS操作系统构建
-安装`CMake`，安装完成之后，
 执行`build-linux*.sh`生成`game_of_life-macos*`并运行。
