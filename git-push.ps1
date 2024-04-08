@@ -8,6 +8,7 @@ if($commit_info -eq "exit"){
     git add res/*
     git add CMakeLists.txt
     git add build*.ps1
+    git add build*.sh
     git add clean.ps1
     git add README.md
     git add git-push.ps1
