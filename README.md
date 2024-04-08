@@ -1,4 +1,4 @@
-# Game Of Life(Windows/Linux/MacOS)
+# Game Of Life (Windows/Linux/MacOS)
 ## Install environment dependencies
 Users need to install environment dependencies and build executable files by themselves.
 Windows required environment dependencies:  
@@ -23,7 +23,7 @@ Execute `build-mingw*.ps1` to generate `game_of_life-mingw*.exe` and run it.
 Execute `build-linux*.sh` to generate `game_of_life-linux*` and run it.
 ### MacOS operating system build
 Execute `build-linux*.sh` to generate `game_of_life-macos*` and run it.
-# 生命游戏(Windows/Linux/MacOS)
+# 生命游戏 (Windows/Linux/MacOS)
 ## 安装环境依赖
 需用户安装环境依赖，自行构建可执行文件。  
 Windows所需环境依赖：  
