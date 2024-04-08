@@ -10,13 +10,13 @@ struct Cell{
 };
 struct Grid{
     // row in range(0,+Inf)
-    // col in range(0,+Inf)
+    // and col in range(0,+Inf)
     // else throw std::out_of_range
     static void init(long long row,long long col);
     static long long row(void)noexcept;
     static long long col(void)noexcept;
     // row in range[0,Grid::row())
-    // col in range[0,Grid::col())
+    // and col in range[0,Grid::col())
     // else throw std::out_of_range
     static Cell at(long long row,long long col);
     static void update(void)noexcept;
