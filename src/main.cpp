@@ -5,14 +5,14 @@
 #include<chrono>//std::chrono
 #include<thread>//std::this_thread
 #include"grid.h"//grid_init grid_update grid_show grid_alive_count
-static bool const __iostream_init_flag=[](){
+static bool const __iostream_init_flag=[](void)noexcept->bool{
     std::cout.tie(nullptr);
     return true;
 }();
-static long long __read_ll(
+static inline long long __read_ll(
     std::string const& prompt,
     std::function<bool(long long)> const& pred
-){
+)noexcept{
     std::string input;
     long long ret=0;
     for(;;){
@@ -30,14 +30,14 @@ static long long __read_ll(
     }
     return ret;
 }
-static void __console_clear(){
+static inline void __console_clear(void)noexcept{
     #ifdef _WIN32
         std::system("cls");
     #else
         std::system("clear");
     #endif
 }
-int main(){
+int main(void)noexcept{
     long long row=__read_ll(
         "Input Row(>0): ",
         [](long long num){return num>0;}
