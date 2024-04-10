@@ -58,7 +58,8 @@ static inline std::string __grid_to_string(void)noexcept{
     }
     return ret;
 }
-int console_mode(void)noexcept{
+int console_mode(int argc,char* argv[]){
+    std::cout<<"Game Of Life (Console Mode)\n";
     long long row=__read_ll(
         "Input Row(>0): ",
         [](long long num)->bool{return num>0;}

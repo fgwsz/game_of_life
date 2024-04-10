@@ -2,6 +2,7 @@
 #include<vector>//std::vector
 #include<random>//std::random_device std::mt19937 std::uniform_int_distribution
 #include<stdexcept>//std::out_of_range
+#include<limits>//std::numeric_limits
 struct __CellPos{
     long long row_,col_;
 };
@@ -18,6 +19,11 @@ static constexpr __CellPos const __cell_dpos_array[8]={
     __CellPos{ 1, 0},
     __CellPos{ 1, 1}
 };
+static inline void __increment(long long& number){
+    if(number<std::numeric_limits<long long>::max()){
+        ++number;
+    }
+}
 static inline Cell::LifeState __make_random_life_state(void)noexcept{
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -30,7 +36,7 @@ long long Grid::row(void)noexcept{
 long long Grid::col(void)noexcept{
     return static_cast<long long>(__grid[0].size());
 }
-Cell Grid::at(long long row,long long col){
+Cell const& Grid::at(long long row,long long col){
     if(row<0||row>=Grid::row()||col<0||col>=Grid::col()){
         throw std::out_of_range(
             "row must be in range[0,Grid::row())"
@@ -95,7 +101,10 @@ void Grid::init(long long row,long long col){
         for(auto& cell:line){
             cell.life_state_=__make_random_life_state();
             if(cell.life_state_==Cell::LifeState::ALIVE){
-                ++__grid_alive_count;
+                cell.age_=0;
+                __increment(__grid_alive_count);
+            }else{
+                cell.age_=-1;
             }
         }
     }
@@ -111,19 +120,22 @@ void Grid::update(void)noexcept{
                     ||cell.alive_neighbors_count_>3
                 ){
                     cell.life_state_=Cell::LifeState::DEAD;
+                    cell.age_=-1;
                 }else{
-                    ++__grid_alive_count;
+                    __increment(cell.age_);
+                    __increment(__grid_alive_count);
                 }
             }else{
                 if(cell.alive_neighbors_count_==3){
                     cell.life_state_=Cell::LifeState::ALIVE;
-                    ++__grid_alive_count;
+                    cell.age_=0;
+                    __increment(__grid_alive_count);
                 }
             }
         }
     }
     __grid_update_alive_neighbors_count_fast();
-    ++__grid_turn_count;
+    __increment(__grid_turn_count);
 }
 long long Grid::turn_count(void)noexcept{
     return __grid_turn_count;
