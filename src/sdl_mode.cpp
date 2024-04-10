@@ -47,19 +47,27 @@ int sdl_mode(int argc,char* argv[]){
         return -1;
     }
     Grid::init(window_height,window_width);
-    SDL_Log("Grid(%d,%d)",Grid::row(),Grid::col());
     SDL_Rect rect={0,0,1,1};
     SDL_Event event;
     for(;;){
         for(long long row=0;row<Grid::row();++row){
             for(long long col=0;col<Grid::col();++col){
-                rect.y=row;
-                rect.x=col;
+                rect.y=static_cast<int>(row);
+                rect.x=static_cast<int>(col);
                 SDL_FillRect(surface,&rect,__cell_to_color(Grid::at(row,col)));
             }
         }
         SDL_UpdateWindowSurface(window);
         Grid::update();
+        SDL_Log("Row:%d,Col:%d,Turn:%d,Alive:%d(%.2f%%)",
+            Grid::row(),
+            Grid::col(),
+            Grid::turn_count(),
+            Grid::alive_count(),
+            static_cast<double>(Grid::alive_count())
+            /static_cast<double>(Grid::row()*Grid::col())
+            *double(100)
+        );
         if(!SDL_PollEvent(&event)){
             continue;
         }
@@ -91,16 +99,16 @@ static inline Uint32 __color_rgb_to_uint32(__ColorRGB const& color){
         (static_cast<Uint32>(color.b_));
 }
 static constexpr long long const __sub_color_rgb_index_map[]={
-    ((long long){1}<<1)-1,
-    ((long long){1}<<2)-1,
-    ((long long){1}<<3)-1,
-    ((long long){1}<<4)-1,
-    ((long long){1}<<5)-1,
-    ((long long){1}<<6)-1,
-    ((long long){1}<<7)-1,
-    ((long long){1}<<8)-1,
-    ((long long){1}<<9)-1,
-    ((long long){1}<<10)-1
+    ((long long)1<<(long long) 1)-(long long)1,
+    ((long long)1<<(long long) 2)-(long long)1,
+    ((long long)1<<(long long) 3)-(long long)1,
+    ((long long)1<<(long long) 4)-(long long)1,
+    ((long long)1<<(long long) 5)-(long long)1,
+    ((long long)1<<(long long) 6)-(long long)1,
+    ((long long)1<<(long long) 7)-(long long)1,
+    ((long long)1<<(long long) 8)-(long long)1,
+    ((long long)1<<(long long) 9)-(long long)1,
+    ((long long)1<<(long long)10)-(long long)1
 };
 static constexpr long long const __sub_color_rgb_max_steps=
     sizeof(__sub_color_rgb_index_map)/sizeof(__sub_color_rgb_index_map[0]);
@@ -129,7 +137,6 @@ static inline Uint32 __cell_to_color(Cell const& cell){
                 __sub_color_rgb_max_steps,
                 index
             );
-
         }
     }
     return __color_rgb_to_uint32(ret);
