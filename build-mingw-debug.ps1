@@ -8,4 +8,6 @@ cmake -G "MinGW Makefiles" ../../..
 cmake --build .
 cd ../../..
 cp "$build_path/$project_name.exe" "./$project_name-mingw-debug.exe"
+$sdl_dll_path="./vendored/sdl/lib/x64/SDL2.dll"
+cp $sdl_dll_path ./SDL2.dll
 & "./$project_name-mingw-debug.exe"
