@@ -9,6 +9,7 @@ if($commit_info -eq "exit"){
     git add include/*
     git add src/*
     git add tests/*
+    git add res/*
     git add docs/*
     git add CMakeLists.txt
     git add LICENSE
@@ -17,7 +18,6 @@ if($commit_info -eq "exit"){
     git add git-push.ps1
     git add git-keep.ps1
     git add build*.ps1
-    git add build*.sh
     git add clean.ps1
     git commit -m $commit_info
     git push
