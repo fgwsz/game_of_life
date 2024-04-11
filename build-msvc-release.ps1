@@ -16,4 +16,9 @@ if($architecture.AddressWidth -eq 64){
 }
 $sdl_dll_path="./vendor/SDL2/lib/$system_info/SDL2.dll"
 cp $sdl_dll_path "./bin/SDL2.dll"
+$bin_res_path="./bin/res"
+if(!(Test-Path -Path $bin_res_path)){
+    mkdir $bin_res_path
+}
+cp ./res/* $bin_res_path
 & "./bin/$project_name-msvc-release.exe"

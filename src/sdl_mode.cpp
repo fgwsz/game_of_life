@@ -1,7 +1,7 @@
 #include"sdl_mode.h"
 #include"SDL.h"
 #include"grid.h"//Cell Grid
-static constexpr char const __window_title[]="Game Of Life (SDL Mode)";
+static constexpr char const __window_title[]="Game Of Life";
 static constexpr double const __screen_width_scale=0.75;
 static constexpr double const __screen_height_scale=0.75;
 struct __ColorRGB{
@@ -41,6 +41,12 @@ int sdl_mode(int argc,char* argv[]){
         SDL_Log("SDL_CreateWindow failed:%s",SDL_GetError());
         return -1;
     }
+    SDL_Surface* icon=SDL_LoadBMP("res/icon.bmp");
+    if(NULL==icon){
+        SDL_Log("SDL_LoadBMP failed:%s",SDL_GetError());
+        return -1;
+    }
+    SDL_SetWindowIcon(window,icon);
     SDL_Surface* surface=SDL_GetWindowSurface(window);
     if(NULL==surface){
         SDL_Log("SDL_GetWindowSurface failed:%s",SDL_GetError());
@@ -76,6 +82,7 @@ int sdl_mode(int argc,char* argv[]){
         }
     }
     SDL_FreeSurface(surface);
+    SDL_FreeSurface(icon);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
