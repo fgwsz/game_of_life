@@ -7,7 +7,7 @@ cd $build_path
 cmake -G "Visual Studio 17 2022" ../../..
 cmake --build .
 cd ../../..
-cp "$build_path/Debug/$project_name.exe" "./$project_name-msvc-debug.exe"
-$sdl_dll_path="./vendored/sdl/lib/x64/SDL2.dll"
-cp $sdl_dll_path ./SDL2.dll
-& "./$project_name-msvc-debug.exe"
+cp "$build_path/Debug/$project_name.exe" "./bin/$project_name-msvc-debug.exe"
+$sdl_dll_path="./vendor/sdl/lib/x64/SDL2.dll"
+cp $sdl_dll_path "./bin/SDL2.dll"
+& "./bin/$project_name-msvc-debug.exe"
