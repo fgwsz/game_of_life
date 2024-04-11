@@ -10,8 +10,8 @@ if($commit_info -eq "exit"){
     git add src/*
     git add tests/*
     git add docs/*
-    git add license/*
     git add CMakeLists.txt
+    git add LICENSE
     git add README.md
     git add .gitignore
     git add git-push.ps1
