@@ -7,7 +7,7 @@ aux_source_directory(src SRC_DIR)
 aux_source_directory(tests TESTS_DIR)
 add_executable(${PROJECT_NAME} ${SRC_DIR} ${TESTS_DIR})
 # SDL2
-set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/sdl/cmake)
+set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/SDL2/cmake)
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 if(TARGET SDL2::SDL2main)
