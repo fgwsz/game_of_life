@@ -1,11 +1,10 @@
-echo "you can input exit to abort git push."
-$commit_info=Read-Host -Prompt "input commit info"
-if($commit_info -eq "exit"){
-    echo "git push exit!"
-}else{
+echo "You Can Input q For Abort."
+$commit_info=Read-Host -Prompt "Input Commit Info"
+if(!($commit_info -eq "q")){
     git add -f bin/.gitkeep
     git add -f build/.gitkeep
     git add -f vendor/.gitkeep
+    git add -f releases/.gitkeep
     git add include/*
     git add src/*
     git add tests/*
